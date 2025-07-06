@@ -5,9 +5,724 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalkulator Zakat Sederhana</title>
     <meta name="description" content="Hitung zakat penghasilan, emas, dan fitrah dengan mudah dan cepat.">
-    <link rel="stylesheet" href="styles.css">
+   
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Reset and Base Styles - Mobile First */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    color: #2c3e50;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+    font-size: 14px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Desktop styles */
+@media (min-width: 768px) {
+    body {
+        font-size: 16px;
+    }
+    
+    .container {
+        padding: 0 20px;
+    }
+}
+
+/* Header Styles - Mobile First */
+.header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100" fill="white" opacity="0.1"><polygon points="0,0 1000,0 1000,100 0,50"/></svg>');
+    background-size: cover;
+    background-position: bottom;
+}
+
+.header-content {
+    position: relative;
+    z-index: 2;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    flex-direction: column;
+}
+
+.logo i {
+    font-size: 2.5rem;
+    color: #f39c12;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.logo h1 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    text-align: center;
+}
+
+.subtitle {
+    font-size: 1rem;
+    font-weight: 300;
+    opacity: 0.9;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Desktop header styles */
+@media (min-width: 768px) {
+    .header {
+        padding: 2rem 0;
+    }
+    
+    .logo {
+        flex-direction: row;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .logo i {
+        font-size: 3rem;
+    }
+    
+    .logo h1 {
+        font-size: 2.5rem;
+    }
+    
+    .subtitle {
+        font-size: 1.2rem;
+        max-width: 600px;
+        padding: 0;
+    }
+}
+
+/* Navigation Tabs - Mobile First */
+.nav-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+    align-items: center;
+}
+
+.tab-btn {
+    background: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    color: #667eea;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 280px;
+    justify-content: center;
+    font-size: 0.9rem;
+}
+
+.tab-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.tab-btn.active {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.tab-btn i {
+    font-size: 1.1rem;
+}
+
+/* Desktop navigation styles */
+@media (min-width: 768px) {
+    .nav-tabs {
+        flex-direction: row;
+        justify-content: center;
+        gap: 1rem;
+        margin: 2rem 0;
+        flex-wrap: wrap;
+    }
+    
+    .tab-btn {
+        padding: 1rem 2rem;
+        border-radius: 50px;
+        min-width: 180px;
+        width: auto;
+        font-size: 1rem;
+    }
+    
+    .tab-btn i {
+        font-size: 1.2rem;
+    }
+}
+
+/* Main Content - Mobile First */
+.main-content {
+    margin: 1.5rem 0;
+}
+
+/* Desktop main content */
+@media (min-width: 768px) {
+    .main-content {
+        margin: 2rem 0;
+    }
+}
+
+.tab-content {
+    display: none;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Card Styles - Mobile First */
+.card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+}
+
+.card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem 1rem;
+    text-align: center;
+}
+
+.card-header h2 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-direction: column;
+}
+
+.card-header p {
+    font-weight: 300;
+    opacity: 0.9;
+    font-size: 0.9rem;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* Desktop card styles */
+@media (min-width: 768px) {
+    .card {
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .card-header {
+        padding: 2rem;
+    }
+    
+    .card-header h2 {
+        font-size: 1.8rem;
+        flex-direction: row;
+    }
+    
+    .card-header p {
+        font-size: 1rem;
+    }
+    
+    .card-body {
+        padding: 2rem;
+    }
+}
+
+/* Input Styles - Mobile First */
+.input-group {
+    margin-bottom: 1.2rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #2c3e50;
+    font-size: 0.9rem;
+}
+
+.input-group input,
+.input-group select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    background: white;
+}
+
+/* Desktop input styles */
+@media (min-width: 768px) {
+    .input-group {
+        margin-bottom: 1.5rem;
+    }
+    
+    .input-group label {
+        font-size: 1rem;
+    }
+    
+    .input-group input,
+    .input-group select {
+        padding: 1rem;
+        border-radius: 10px;
+        font-size: 1rem;
+    }
+}
+
+/* Info Box - Mobile First */
+.info-box {
+    background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+    border: 1px solid #e1bee7;
+    border-radius: 8px;
+    padding: 0.8rem;
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.info-box i {
+    color: #667eea;
+    font-size: 1.1rem;
+}
+
+.info-box p {
+    margin: 0;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+/* Desktop info box styles */
+@media (min-width: 768px) {
+    .info-box {
+        border-radius: 10px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .info-box i {
+        font-size: 1.2rem;
+    }
+    
+    .info-box p {
+        font-size: 1rem;
+    }
+}
+
+/* Calculate Button - Mobile First */
+.calculate-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.calculate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.calculate-btn:active {
+    transform: translateY(0);
+}
+
+/* Desktop button styles */
+@media (min-width: 768px) {
+    .calculate-btn {
+        padding: 1rem 2rem;
+        border-radius: 50px;
+        font-size: 1.1rem;
+    }
+}
+
+/* Result Box - Mobile First */
+.result-box {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 1.2rem;
+    margin-top: 1.2rem;
+    animation: slideIn 0.5s ease-out;
+}
+
+.result-box.hidden {
+    display: none;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+.result-box h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    text-align: center;
+}
+
+.result-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.result-item:last-child {
+    border-bottom: none;
+}
+
+.result-item span:first-child {
+    font-weight: 500;
+    color: #495057;
+    font-size: 0.9rem;
+}
+
+.amount {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #28a745;
+}
+
+.status {
+    font-weight: 600;
+    padding: 0.25rem 0.6rem;
+    border-radius: 15px;
+    font-size: 0.8rem;
+}
+
+.status.wajib {
+    background: #28a745;
+    color: white;
+}
+
+.status.tidak-wajib {
+    background: #dc3545;
+    color: white;
+}
+
+/* Desktop result box styles */
+@media (min-width: 768px) {
+    .result-box {
+        border-radius: 15px;
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+    }
+    
+    .result-box h3 {
+        font-size: 1.3rem;
+    }
+    
+    .result-item {
+        padding: 0.75rem 0;
+    }
+    
+    .result-item span:first-child {
+        font-size: 1rem;
+    }
+    
+    .amount {
+        font-size: 1.2rem;
+    }
+    
+    .status {
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Footer - Mobile First & Professional */
+.footer {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+    color: white;
+    padding: 2rem 0 1rem;
+    margin-top: 2rem;
+}
+
+.footer-content {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.footer-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.footer-brand i {
+    font-size: 1.5rem;
+    color: #f39c12;
+}
+
+.footer-brand h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #f39c12;
+}
+
+.footer-description {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    opacity: 0.9;
+    margin-bottom: 1.5rem;
+    max-width: 100%;
+}
+
+.footer-features {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.footer-feature {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    padding: 0.5rem;
+    background: rgba(255,255,255,0.1);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.footer-feature:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.footer-feature i {
+    color: #28a745;
+    font-size: 0.8rem;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    opacity: 0.8;
+}
+
+.footer-bottom p {
+    font-size: 0.8rem;
+    line-height: 1.5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.footer-bottom i {
+    color: #f39c12;
+    font-size: 0.9rem;
+}
+
+/* Desktop footer styles */
+@media (min-width: 768px) {
+    .footer {
+        padding: 3rem 0 1rem;
+        margin-top: 3rem;
+    }
+    
+    .footer-brand h3 {
+        font-size: 1.4rem;
+    }
+    
+    .footer-description {
+        font-size: 1rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .footer-features {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1rem;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .footer-feature {
+        font-size: 0.9rem;
+        padding: 0.75rem;
+    }
+    
+    .footer-bottom {
+        padding-top: 2rem;
+    }
+    
+    .footer-bottom p {
+        font-size: 0.9rem;
+    }
+}
+
+/* Additional Mobile Styles */
+@media (max-width: 480px) {
+    .card-header h2 {
+        font-size: 1.2rem;
+        gap: 0.3rem;
+    }
+    
+    .result-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .result-item span:last-child {
+        align-self: flex-end;
+    }
+    
+    .footer-features {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+    
+    .footer-feature {
+        font-size: 0.8rem;
+        padding: 0.75rem;
+    }
+}
+
+/* Loading Animation */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Smooth Scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+} 
+        </style>
 </head>
 <body>
     <div class="container">
@@ -206,6 +921,439 @@
         </footer>
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // Zakat Calculator JavaScript
+
+// Constants for Zakat calculations
+const ZAKAT_RATES = {
+    penghasilan: 0.025, // 2.5%
+    emas: 0.025, // 2.5%
+    fitrah: 2.5 // 2.5 kg per person
+};
+
+const NISAB_VALUES = {
+    emas: 85, // 85 grams of gold
+    perak: 595, // 595 grams of silver
+    penghasilan: 653000 // Approximate nisab based on gold price (updated periodically)
+};
+
+// Current market prices (these should be updated regularly)
+const CURRENT_PRICES = {
+    emas: 1100000, // Rp per gram (example price)
+    beras: 12000, // Rp per kg (example price)
+    gandum: 15000 // Rp per kg (example price)
+};
+
+// DOM Elements
+const tabButtons = document.querySelectorAll('.tab-btn');
+const tabContents = document.querySelectorAll('.tab-content');
+
+// Initialize the application
+document.addEventListener('DOMContentLoaded', function() {
+    initializeApp();
+    setupEventListeners();
+    updateNisabDisplay();
+});
+
+// Initialize the application
+function initializeApp() {
+    // Set default values
+    document.getElementById('jumlah-jiwa').value = 1;
+    document.getElementById('harga-makanan-input').value = CURRENT_PRICES.beras;
+    document.getElementById('harga-emas-input').value = CURRENT_PRICES.emas;
+    
+    // Show first tab by default
+    showTab('penghasilan');
+}
+
+// Setup event listeners
+function setupEventListeners() {
+    // Tab switching
+    tabButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const tabName = this.getAttribute('data-tab');
+            showTab(tabName);
+        });
+    });
+
+    // Input formatting for currency inputs
+    const currencyInputs = document.querySelectorAll('#penghasilan-input, #harga-emas-input, #harga-makanan-input');
+    currencyInputs.forEach(input => {
+        input.addEventListener('input', function() {
+            formatCurrencyInput(this);
+        });
+    });
+
+    // Auto-update nisab when gold price changes
+    document.getElementById('harga-emas-input').addEventListener('input', function() {
+        updatePenghasilanNisab();
+    });
+
+    // Auto-update food type price
+    document.getElementById('jenis-makanan').addEventListener('change', function() {
+        updateFoodPrice();
+    });
+}
+
+// Tab switching function
+function showTab(tabName) {
+    // Hide all tab contents
+    tabContents.forEach(content => {
+        content.classList.remove('active');
+    });
+    
+    // Remove active class from all buttons
+    tabButtons.forEach(button => {
+        button.classList.remove('active');
+    });
+    
+    // Show selected tab content
+    document.getElementById(tabName).classList.add('active');
+    
+    // Add active class to selected button
+    document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+}
+
+// Format currency input
+function formatCurrencyInput(input) {
+    let value = input.value.replace(/[^0-9]/g, '');
+    input.value = value;
+}
+
+// Format number to Indonesian Rupiah
+function formatRupiah(amount) {
+    return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0
+    }).format(amount);
+}
+
+// Update nisab display
+function updateNisabDisplay() {
+    const penghasilanNisab = NISAB_VALUES.emas * CURRENT_PRICES.emas;
+    document.getElementById('nisab-penghasilan').textContent = formatRupiah(penghasilanNisab);
+    document.getElementById('nisab-emas').textContent = NISAB_VALUES.emas + ' gram';
+    document.getElementById('ukuran-fitrah').textContent = ZAKAT_RATES.fitrah + ' kg per jiwa';
+}
+
+// Update penghasilan nisab based on current gold price
+function updatePenghasilanNisab() {
+    const hargaEmas = parseFloat(document.getElementById('harga-emas-input').value) || CURRENT_PRICES.emas;
+    const nisabPenghasilan = NISAB_VALUES.emas * hargaEmas;
+    document.getElementById('nisab-penghasilan').textContent = formatRupiah(nisabPenghasilan);
+}
+
+// Update food price based on selected type
+function updateFoodPrice() {
+    const jenisMakanan = document.getElementById('jenis-makanan').value;
+    const hargaDefault = jenisMakanan === 'beras' ? CURRENT_PRICES.beras : CURRENT_PRICES.gandum;
+    document.getElementById('harga-makanan-input').value = hargaDefault;
+}
+
+// Calculate Zakat Penghasilan
+function hitungZakatPenghasilan() {
+    const penghasilanInput = document.getElementById('penghasilan-input');
+    const penghasilan = parseFloat(penghasilanInput.value) || 0;
+    
+    // Validation
+    if (penghasilan <= 0) {
+        alert('Mohon masukkan jumlah penghasilan yang valid!');
+        penghasilanInput.focus();
+        return;
+    }
+    
+    // Calculate nisab based on current gold price
+    const hargaEmas = parseFloat(document.getElementById('harga-emas-input').value) || CURRENT_PRICES.emas;
+    const nisabPenghasilan = NISAB_VALUES.emas * hargaEmas;
+    
+    // Calculate zakat
+    let zakatAmount = 0;
+    let status = 'tidak-wajib';
+    let statusText = 'Tidak Wajib Zakat';
+    
+    if (penghasilan >= nisabPenghasilan) {
+        zakatAmount = penghasilan * ZAKAT_RATES.penghasilan;
+        status = 'wajib';
+        statusText = 'Wajib Zakat';
+    }
+    
+    // Display results
+    document.getElementById('zakat-penghasilan').textContent = formatRupiah(zakatAmount);
+    document.getElementById('status-penghasilan').textContent = statusText;
+    document.getElementById('status-penghasilan').className = `status ${status}`;
+    document.getElementById('result-penghasilan').classList.remove('hidden');
+    
+    // Animate result box
+    animateResultBox('result-penghasilan');
+}
+
+// Calculate Zakat Emas
+function hitungZakatEmas() {
+    const emasInput = document.getElementById('emas-input');
+    const hargaEmasInput = document.getElementById('harga-emas-input');
+    const beratEmas = parseFloat(emasInput.value) || 0;
+    const hargaEmas = parseFloat(hargaEmasInput.value) || 0;
+    
+    // Validation
+    if (beratEmas <= 0) {
+        alert('Mohon masukkan berat emas yang valid!');
+        emasInput.focus();
+        return;
+    }
+    
+    if (hargaEmas <= 0) {
+        alert('Mohon masukkan harga emas yang valid!');
+        hargaEmasInput.focus();
+        return;
+    }
+    
+    // Calculate total value
+    const nilaiTotalEmas = beratEmas * hargaEmas;
+    
+    // Calculate zakat
+    let zakatAmount = 0;
+    let status = 'tidak-wajib';
+    let statusText = 'Tidak Wajib Zakat';
+    
+    if (beratEmas >= NISAB_VALUES.emas) {
+        zakatAmount = nilaiTotalEmas * ZAKAT_RATES.emas;
+        status = 'wajib';
+        statusText = 'Wajib Zakat';
+    }
+    
+    // Display results
+    document.getElementById('nilai-emas').textContent = formatRupiah(nilaiTotalEmas);
+    document.getElementById('zakat-emas').textContent = formatRupiah(zakatAmount);
+    document.getElementById('status-emas').textContent = statusText;
+    document.getElementById('status-emas').className = `status ${status}`;
+    document.getElementById('result-emas').classList.remove('hidden');
+    
+    // Animate result box
+    animateResultBox('result-emas');
+}
+
+// Calculate Zakat Fitrah
+function hitungZakatFitrah() {
+    const hargaMakananInput = document.getElementById('harga-makanan-input');
+    const jumlahJiwaInput = document.getElementById('jumlah-jiwa');
+    const hargaMakanan = parseFloat(hargaMakananInput.value) || 0;
+    const jumlahJiwa = parseInt(jumlahJiwaInput.value) || 1;
+    
+    // Validation
+    if (hargaMakanan <= 0) {
+        alert('Mohon masukkan harga makanan yang valid!');
+        hargaMakananInput.focus();
+        return;
+    }
+    
+    if (jumlahJiwa <= 0) {
+        alert('Mohon masukkan jumlah jiwa yang valid!');
+        jumlahJiwaInput.focus();
+        return;
+    }
+    
+    // Calculate zakat fitrah
+    const totalBeratMakanan = ZAKAT_RATES.fitrah * jumlahJiwa;
+    const zakatFitrahAmount = totalBeratMakanan * hargaMakanan;
+    
+    // Display results
+    document.getElementById('total-berat').textContent = totalBeratMakanan + ' kg';
+    document.getElementById('zakat-fitrah').textContent = formatRupiah(zakatFitrahAmount);
+    document.getElementById('jiwa-fitrah').textContent = jumlahJiwa + ' jiwa';
+    document.getElementById('result-fitrah').classList.remove('hidden');
+    
+    // Animate result box
+    animateResultBox('result-fitrah');
+}
+
+// Animate result box appearance
+function animateResultBox(elementId) {
+    const resultBox = document.getElementById(elementId);
+    resultBox.style.transform = 'translateX(-20px)';
+    resultBox.style.opacity = '0';
+    
+    setTimeout(() => {
+        resultBox.style.transform = 'translateX(0)';
+        resultBox.style.opacity = '1';
+    }, 100);
+}
+
+// Add input validation for numeric inputs
+function validateNumericInput(input, min = 0) {
+    const value = parseFloat(input.value);
+    if (isNaN(value) || value < min) {
+        input.style.borderColor = '#dc3545';
+        return false;
+    } else {
+        input.style.borderColor = '#28a745';
+        return true;
+    }
+}
+
+// Add real-time validation
+document.addEventListener('DOMContentLoaded', function() {
+    const numericInputs = document.querySelectorAll('input[type="number"]');
+    
+    numericInputs.forEach(input => {
+        input.addEventListener('blur', function() {
+            validateNumericInput(this);
+        });
+        
+        input.addEventListener('input', function() {
+            // Remove error styling on input
+            this.style.borderColor = '#e0e0e0';
+        });
+    });
+});
+
+// Add smooth scrolling to result sections
+function scrollToResult(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        element.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'nearest' 
+        });
+    }
+}
+
+// Enhanced calculation functions with scroll
+function hitungZakatPenghasilanEnhanced() {
+    hitungZakatPenghasilan();
+    setTimeout(() => scrollToResult('result-penghasilan'), 300);
+}
+
+function hitungZakatEmasEnhanced() {
+    hitungZakatEmas();
+    setTimeout(() => scrollToResult('result-emas'), 300);
+}
+
+function hitungZakatFitrahEnhanced() {
+    hitungZakatFitrah();
+    setTimeout(() => scrollToResult('result-fitrah'), 300);
+}
+
+// Add keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+    // Alt + 1, 2, 3 for tab switching
+    if (e.altKey) {
+        switch(e.key) {
+            case '1':
+                e.preventDefault();
+                showTab('penghasilan');
+                break;
+            case '2':
+                e.preventDefault();
+                showTab('emas');
+                break;
+            case '3':
+                e.preventDefault();
+                showTab('fitrah');
+                break;
+        }
+    }
+    
+    // Enter key to calculate in focused section
+    if (e.key === 'Enter') {
+        const activeTab = document.querySelector('.tab-content.active');
+        if (activeTab) {
+            const calculateBtn = activeTab.querySelector('.calculate-btn');
+            if (calculateBtn) {
+                calculateBtn.click();
+            }
+        }
+    }
+});
+
+// Add loading animation for calculations
+function showLoadingAnimation(buttonId) {
+    const button = document.getElementById(buttonId);
+    if (button) {
+        const originalText = button.innerHTML;
+        button.innerHTML = '<div class="loading"></div> Menghitung...';
+        button.disabled = true;
+        
+        setTimeout(() => {
+            button.innerHTML = originalText;
+            button.disabled = false;
+        }, 1000);
+    }
+}
+
+// Print results function
+function printResults() {
+    const printWindow = window.open('', '', 'width=800,height=600');
+    const activeTab = document.querySelector('.tab-content.active');
+    const resultBox = activeTab.querySelector('.result-box:not(.hidden)');
+    
+    if (resultBox) {
+        printWindow.document.write(`
+            <html>
+                <head>
+                    <title>Hasil Perhitungan Zakat</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        h1 { color: #667eea; }
+                        .result-item { margin: 10px 0; padding: 10px; border-bottom: 1px solid #eee; }
+                        .amount { color: #28a745; font-weight: bold; }
+                        .status { padding: 5px 10px; border-radius: 15px; }
+                        .wajib { background: #28a745; color: white; }
+                        .tidak-wajib { background: #dc3545; color: white; }
+                    </style>
+                </head>
+                <body>
+                    <h1>Hasil Perhitungan Zakat</h1>
+                    <p>Tanggal: ${new Date().toLocaleDateString('id-ID')}</p>
+                    ${resultBox.innerHTML}
+                    <br>
+                    <p><em>Aplikasi ini dibuat sebagai alat bantu edukatif. Untuk keputusan akhir, dianjurkan berkonsultasi dengan lembaga zakat terpercaya.</em></p>
+                </body>
+            </html>
+        `);
+        printWindow.document.close();
+        printWindow.print();
+    }
+}
+
+// Update prices from API (placeholder function)
+async function updatePricesFromAPI() {
+    try {
+        // This would be replaced with actual API calls
+        // const response = await fetch('https://api.example.com/prices');
+        // const data = await response.json();
+        
+        // For now, just show a notification
+        console.log('Prices updated successfully');
+    } catch (error) {
+        console.error('Failed to update prices:', error);
+    }
+}
+
+// Initialize tooltips for better UX
+function initializeTooltips() {
+    const tooltips = document.querySelectorAll('[data-tooltip]');
+    tooltips.forEach(element => {
+        element.addEventListener('mouseenter', function() {
+            const tooltipText = this.getAttribute('data-tooltip');
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+            tooltip.textContent = tooltipText;
+            document.body.appendChild(tooltip);
+            
+            const rect = this.getBoundingClientRect();
+            tooltip.style.left = rect.left + 'px';
+            tooltip.style.top = (rect.top - 30) + 'px';
+        });
+        
+        element.addEventListener('mouseleave', function() {
+            const tooltip = document.querySelector('.tooltip');
+            if (tooltip) {
+                tooltip.remove();
+            }
+        });
+    });
+} 
+    </script>
 </body>
 </html> 
